@@ -1,5 +1,9 @@
 import forecastio
-api_key = "2ab9399ff070f38f3770f11708229d73"
+import os
+
+
+api_key = os.environ['FORECASTIO']
+
 lat = 53.4393315
 lon = -1.9568661
 
