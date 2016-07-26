@@ -31,5 +31,5 @@ if __name__ == "__main__":
 
   epd.display(bw)
   epd.update()
-  print file_name
+
 
