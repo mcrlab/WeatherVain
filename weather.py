@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
   forecast = forecastio.load_forecast(api_key, lat, lon)
   daily = forecast.currently()  
-  file_name = "./icons/%s.jpg" % daily.icon
+  file_name = "%s/icons/%s.jpg" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
 
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
