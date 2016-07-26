@@ -5,6 +5,9 @@ import re
 
 from PIL import Image
 from PIL import ImageOps
+from PIL import ImageDraw
+from PIL import ImageFont
+
 from EPD import EPD
 
 api_key = os.environ['FORECASTIO']
@@ -29,5 +32,10 @@ if __name__ == "__main__":
   rs = image.resize((epd.width, epd.height))
   bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
+  draw = ImageDraw(bw)
+  draw.line((0, 0) + im.size, fill=128)
+  draw.line((0, im.size[1], im.size[0], 0), fill=128)
+
+  del draw
   epd.display(bw)
   epd.update()
