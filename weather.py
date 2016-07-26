@@ -25,6 +25,8 @@ possible_fonts = [
 
 FONT_FILE = ''
 FONT_SIZE  = 30
+WHITE = 0
+BLACK = 1
 
 for f in possible_fonts:
     if os.path.exists(f):
