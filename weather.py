@@ -59,7 +59,7 @@ def display(epd):
 
   font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
   
-  draw.text((5, 10), 'TEST', fill=BLACK, font=clock_font)
+  draw.text((5, 10), 'TEST', fill=BLACK, font=font)
 
   rs = image.resize((epd.width, epd.height))
   bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
