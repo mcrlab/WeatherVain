@@ -26,10 +26,13 @@ if __name__ == "__main__":
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
 
-  rs = image.resize((epd.width, epd.height))
-  bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
+  w,h = image.size
+  x = w / 2 - epd.width / 2
+  y = h / 2 - epd.height / 2
+
+  cropped = image.crop((x, y, x + epd.width, y + epd.height))
+  bw = cropped.convert("1", dither=Image.FLOYDSTEINBERG)
 
   epd.display(bw)
   epd.update()
-
 
