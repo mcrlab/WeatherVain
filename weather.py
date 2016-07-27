@@ -28,6 +28,12 @@ FONT_SIZE  = 30
 WHITE = 0
 BLACK = 1
 
+api_text_file = open('./api.txt')
+api_key = api_text_file.read().strip(' \t\n\r')
+
+if '' == api_key:
+    raise 'no api key'
+
 for f in possible_fonts:
     if os.path.exists(f):
         FONT_FILE = f
@@ -43,15 +49,18 @@ def main(argv):
 
 
 def display(epd):
-  api_key = os.environ['FORECASTIO']
 
   lat = 53.4393315
   lon = -1.9568661
- 
+
+  print "clearing Screen"
+  epd.clear()
+  print "fetching forecast"
+
   forecast = forecastio.load_forecast(api_key, lat, lon)
   daily = forecast.currently()  
   file_name = "%s/icons/%s.jpg" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
-
+  print file_name
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
 
@@ -59,7 +68,7 @@ def display(epd):
 
   font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
   
-  draw.text((5, 10), 'TEST', fill=BLACK, font=font)
+#  draw.text((5, 10), daily.temperature, fill=WHITE, font=font)
 
   rs = image.resize((epd.width, epd.height))
   bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
