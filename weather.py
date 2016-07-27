@@ -47,7 +47,7 @@ def display(epd):
 
   lat = 53.4393315
   lon = -1.9568661
-
+ 
   forecast = forecastio.load_forecast(api_key, lat, lon)
   daily = forecast.currently()  
   file_name = "%s/icons/%s.jpg" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
@@ -64,7 +64,6 @@ def display(epd):
   rs = image.resize((epd.width, epd.height))
   bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
-  epd.clear()
   epd.display(bw)
   epd.update()
 
