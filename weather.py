@@ -59,7 +59,7 @@ def display(epd):
 
   forecast = forecastio.load_forecast(api_key, lat, lon)
   daily = forecast.currently()  
-  file_name = "%s/icons/%s.jpg" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
+  file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
   print file_name
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
