@@ -13,34 +13,11 @@ import time
 
 from EPD import EPD
 
-possible_fonts = [
-    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-Bold.ttf',   # R.Pi
-    '/usr/share/fonts/truetype/freefont/FreeMono.ttf',                # R.Pi
-    '/usr/share/fonts/truetype/LiberationMono-Bold.ttf',              # B.B
-    '/usr/share/fonts/truetype/DejaVuSansMono-Bold.ttf',              # B.B
-    '/usr/share/fonts/TTF/FreeMonoBold.ttf',                          # Arch
-    '/usr/share/fonts/TTF/DejaVuSans-Bold.ttf'                        # Arch
-]
-
-
-FONT_FILE = ''
-FONT_SIZE  = 30
-WHITE = 0
-BLACK = 1
-
 api_text_file = open('./api.txt')
 api_key = api_text_file.read().strip(' \t\n\r')
 
 if '' == api_key:
     raise 'no api key'
-
-for f in possible_fonts:
-    if os.path.exists(f):
-        FONT_FILE = f
-        break
-
-if '' == FONT_FILE:
-    raise 'no font file found'
 
 
 def main(argv):
@@ -61,17 +38,17 @@ def display(epd):
   daily = forecast.currently()  
   file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
   print file_name
+
+  canvas = Image.new("RGB", (epd.width, epd.height))
+
+  
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
-
-  draw = ImageDraw.Draw(image)
-
-  font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
   
-#  draw.text((5, 10), daily.temperature, fill=WHITE, font=font)
-
   rs = image.resize((epd.width, epd.height))
   bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
+
+  canvas.Paste(bw, (0, 0))
 
   epd.display(bw)
   epd.update()
