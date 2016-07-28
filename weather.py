@@ -50,7 +50,7 @@ def display(epd):
 
   canvas.Paste(bw, (0, 0))
 
-  epd.display(bw)
+  epd.display(canvas)
   epd.update()
 
 
