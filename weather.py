@@ -48,7 +48,7 @@ def display(epd):
   rs = image.resize((epd.width, epd.height))
   bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
-  canvas.Paste(bw, (0, 0))
+  canvas.paste(bw, (0, 0))
 
   epd.display(canvas)
   epd.update()
