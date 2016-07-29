@@ -27,6 +27,13 @@ def main(argv):
   display(epd)
 
 
+def getWeatherImage(text):
+  file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), text)
+  print file_name
+  image = Image.open(file_name)
+  image = ImageOps.grayscale(image)
+  return image
+
 def display(epd):
 
   lat = 53.4393315
@@ -41,45 +48,18 @@ def display(epd):
   currently = forecast.currently()
   byHour = forecast.hourly()
 
-  file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), currently.icon)
-  print file_name
-
   canvas = Image.new("RGB", (epd.width, epd.height), "black")
   draw = ImageDraw.Draw(canvas)
   draw.rectangle((0, 0, epd.width, epd.height), fill=1)
   
-  image = Image.open(file_name)
-  image = ImageOps.grayscale(image)
-
-  for hourlyData in byHour.data[:3]:
-    print hourlyData.icon
-
-  icon1 = Image.open(file_name)
-  icon1 = ImageOps.grayscale(image)
-  
-
-  icon2 = Image.open(file_name)
-  icon2 = ImageOps.grayscale(image)
-
-
-  icon3 = Image.open(file_name)
-  icon3 = ImageOps.grayscale(image)
-
-  icon1_rs = icon1.resize((60, 60))
-  icon1_rs = icon1_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-
-  icon2_rs = icon2.resize((60, 60))
-  icon2_rs = icon2_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-
-  icon3_rs = icon3.resize((60, 60))
-  icon3_rs = icon3_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-
-
+  image = getWeatherImage(currently.icon)
   canvas.paste(image, (0, 0))
 
-  canvas.paste(icon1_rs,(178,0))
-  canvas.paste(icon2_rs,(178,60))
-  canvas.paste(icon3_rs,(178,120))
+  for index, hourlyData in byHour.data[:3]:
+    icon = getWeatherImage(hourlyData.icon)
+    icon_rs = icon1.resize((60, 60))
+    icon1_rs = icon1_rs.convert("1", dither=Image.FLOYDSTEINBERG)
+    canvas.paste(icon1_rs,(178,(index*60)))
   
   epd.display(canvas)
   epd.update()
