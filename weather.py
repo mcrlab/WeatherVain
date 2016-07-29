@@ -57,6 +57,14 @@ def display(epd):
   icon1 = Image.open(file_name)
   icon1 = ImageOps.grayscale(image)
   
+
+  icon2 = Image.open(file_name)
+  icon2 = ImageOps.grayscale(image)
+
+
+  icon3 = Image.open(file_name)
+  icon3 = ImageOps.grayscale(image)
+
   icon1_rs = icon1.resize((60, 60))
   icon1_rs = icon1_rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
