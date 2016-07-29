@@ -68,8 +68,8 @@ def display(epd):
   icon1_rs = icon1.resize((60, 60))
   icon1_rs = icon1_rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
-  icon3_rs = icon2.resize((60, 60))
-  icon3_rs = icon2_rs.convert("1", dither=Image.FLOYDSTEINBERG)
+  icon2_rs = icon2.resize((60, 60))
+  icon2_rs = icon2_rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
   icon3_rs = icon3.resize((60, 60))
   icon3_rs = icon3_rs.convert("1", dither=Image.FLOYDSTEINBERG)
