@@ -12,7 +12,9 @@ from datetime import datetime
 import time
 
 from EPD import EPD
+
 WHITE = 1
+
 api_text_file = open('%s/api.txt' % (os.path.dirname(os.path.realpath(__file__))))
 api_key = api_text_file.read().strip(' \t\n\r')
 
@@ -45,12 +47,17 @@ def display(epd):
   
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
+
+
+  icon1 = Image.open(file_name)
+  icon1 = ImageOps.grayscale(image)
   
-  #rs = image.resize((epd.width, epd.height))
-  #bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
+  icon1_rs = icon1.resize((60, 60))
+  icon1_rs = icon1_rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
   canvas.paste(image, (0, 0))
-
+  canvas.paste(icon1_rs,(178,0))
+  
   epd.display(canvas)
   epd.update()
 
