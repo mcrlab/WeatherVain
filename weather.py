@@ -80,8 +80,6 @@ def display(epd):
   canvas.paste(icon1_rs,(178,0))
   canvas.paste(icon2_rs,(178,60))
   canvas.paste(icon3_rs,(178,120))
-
-  canvas.paste()
   
   epd.display(canvas)
   epd.update()
