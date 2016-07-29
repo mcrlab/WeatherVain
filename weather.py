@@ -13,7 +13,7 @@ import time
 
 from EPD import EPD
 
-api_text_file = open('./api.txt')
+api_text_file = open('%s/api.txt' % (os.path.dirname(os.path.realpath(__file__))))
 api_key = api_text_file.read().strip(' \t\n\r')
 
 if '' == api_key:
