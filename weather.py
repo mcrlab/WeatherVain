@@ -40,7 +40,8 @@ def display(epd):
   print file_name
 
   canvas = Image.new("RGB", (epd.width, epd.height))
-
+  draw = ImageDraw.Draw(canvas)
+  draw.rectangle((0, 0, epd.width, epd.height), fill=WHITE, outline=WHITE)
   
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
