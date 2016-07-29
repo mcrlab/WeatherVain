@@ -12,7 +12,7 @@ from datetime import datetime
 import time
 
 from EPD import EPD
-
+WHITE = 1
 api_text_file = open('%s/api.txt' % (os.path.dirname(os.path.realpath(__file__))))
 api_key = api_text_file.read().strip(' \t\n\r')
 
@@ -39,9 +39,9 @@ def display(epd):
   file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), daily.icon)
   print file_name
 
-  canvas = Image.new("RGB", (epd.width, epd.height))
+  canvas = Image.new("RGB", (epd.width, epd.height), "black")
   draw = ImageDraw.Draw(canvas)
-  draw.rectangle((0, 0, epd.width, epd.height), fill=WHITE, outline=WHITE)
+  draw.rectangle((0, 0, epd.width, epd.height), fill=0)
   
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
