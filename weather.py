@@ -45,10 +45,10 @@ def display(epd):
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
   
-  rs = image.resize((epd.width, epd.height))
-  bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
+  #rs = image.resize((epd.width, epd.height))
+  #bw = rs.convert("1", dither=Image.FLOYDSTEINBERG)
 
-  canvas.paste(bw, (0, 0))
+  canvas.paste(image, (0, 0))
 
   epd.display(canvas)
   epd.update()
