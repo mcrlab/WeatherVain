@@ -49,18 +49,21 @@ def display(epd):
   byHour = forecast.hourly()
 
   canvas = Image.new("RGB", (epd.width, epd.height), "black")
-  draw = ImageDraw.Draw(canvas)
-  draw.rectangle((0, 0, epd.width, epd.height), fill=1)
+#  draw = ImageDraw.Draw(canvas)
+#  draw.rectangle((0, 0, epd.width, epd.height), fill=1)
   
   image = getWeatherImage(currently.icon)
   canvas.paste(image, (0, 0))
 
-  for index, hourlyData in byHour.data[:3]:
+  index = 0
+  for hourlyData in byHour.data:
+    if(index > 2): break
     icon = getWeatherImage(hourlyData.icon)
-    icon_rs = icon1.resize((60, 60))
-    icon1_rs = icon1_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-    canvas.paste(icon1_rs,(178,(index*60)))
-  
+    icon_rs = icon.resize((60, 60))
+    icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
+    canvas.paste(icon_rs,(178,(index*60)))
+    index = index + 1
+
   epd.display(canvas)
   epd.update()
 
