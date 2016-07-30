@@ -24,6 +24,7 @@ if '' == api_key:
 
 def main(argv):
   epd = EPD()
+  print epd.size
   display(epd)
 
 
@@ -48,12 +49,14 @@ def display(epd):
   currently = forecast.currently()
   byHour = forecast.hourly()
 
-  canvas = Image.new("RGB", (epd.width, epd.height), "black")
+  canvas = Image.new("1", epd.size, WHITE)
 #  draw = ImageDraw.Draw(canvas)
 #  draw.rectangle((0, 0, epd.width, epd.height), fill=1)
   
   image = getWeatherImage(currently.icon)
-  canvas.paste(image, (0, 0))
+  icon_x = (epd.width - 60) / 2;
+  icon_y = (epd.height / 2)
+  canvas.paste(image, (icon_x - (178/2), icon_y - (178/2)))
 
   index = 0
   for hourlyData in byHour.data:
@@ -61,7 +64,7 @@ def display(epd):
     icon = getWeatherImage(hourlyData.icon)
     icon_rs = icon.resize((60, 60))
     icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-    canvas.paste(icon_rs,(178,(index*60)))
+    canvas.paste(icon_rs,((epd.width-60),(index*60)))
     index = index + 1
 
   epd.display(canvas)
