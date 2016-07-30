@@ -13,7 +13,6 @@ import time
 
 from EPD import EPD
 
-WHITE = 1
 
 api_text_file = open('%s/api.txt' % (os.path.dirname(os.path.realpath(__file__))))
 api_key = api_text_file.read().strip(' \t\n\r')
@@ -21,6 +20,26 @@ api_key = api_text_file.read().strip(' \t\n\r')
 if '' == api_key:
     raise 'no api key'
 
+
+possible_fonts = [
+    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-Bold.ttf',   # R.Pi
+    '/usr/share/fonts/truetype/freefont/FreeMono.ttf',                # R.Pi
+    '/usr/share/fonts/truetype/LiberationMono-Bold.ttf',              # B.B
+    '/usr/share/fonts/truetype/DejaVuSansMono-Bold.ttf',              # B.B
+    '/usr/share/fonts/TTF/FreeMonoBold.ttf',                          # Arch
+    '/usr/share/fonts/TTF/DejaVuSans-Bold.ttf'                        # Arch
+]
+
+FONT_FILE = ''
+for f in possible_fonts:
+    if os.path.exists(f):
+        FONT_FILE = f
+        break
+
+if '' == FONT_FILE:
+    raise 'no font file found'
+
+FONT_SIZE = 20
 
 def main(argv):
   epd = EPD()
@@ -58,6 +77,8 @@ def display(epd):
   icon_y = (epd.height / 2)
   canvas.paste(image, (icon_x - (178/2), icon_y - (178/2)))
 
+  font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
+
   index = 0
   icon_index = 0
   for hourlyData in byHour.data:
@@ -67,9 +88,11 @@ def display(epd):
       icon = getWeatherImage(weather_image)
       icon_rs = icon.resize((60, 60))
       icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-      canvas.paste(icon_rs,((epd.width-60),(icon_index*60)))
+      canvas.paste(icon_rs,((epd.width - 60),(icon_index*60)))
       index = index + 1
       icon_index = icon_index + 1
+      draw.text((178, (icon_index * 60)-30), index, fill=WHITE, font=font)
+
 
   epd.display(canvas)
   epd.update()
