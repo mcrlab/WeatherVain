@@ -69,6 +69,7 @@ def display(epd):
       icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
       canvas.paste(icon_rs,((epd.width-60),(icon_index*60)))
       index = index + 1
+      icon_index = icon_index + 1
 
   epd.display(canvas)
   epd.update()
