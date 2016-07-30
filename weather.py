@@ -75,7 +75,7 @@ def display(epd):
         icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
         canvas.paste(icon_rs,((epd.width - 60),(icon_index*60)))
         icon_index = icon_index + 1
-        draw.text((178, (icon_index * 60)-30), "%s" % hourlyData.time.strftime("%H%p"), fill=BLACK, font=font)
+        draw.text((178, (icon_index * 60)-(30+(FONT_SIZE/2)), "%s" % hourlyData.time.strftime("%h%p"), fill=BLACK, font=font)
     index = index + 1
 
   epd.display(canvas)
