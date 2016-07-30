@@ -12,7 +12,8 @@ from datetime import datetime
 import time
 
 from EPD import EPD
-
+WHITE = 1
+BLACK = 0
 
 api_text_file = open('%s/api.txt' % (os.path.dirname(os.path.realpath(__file__))))
 api_key = api_text_file.read().strip(' \t\n\r')
@@ -22,6 +23,7 @@ if '' == api_key:
 
 
 possible_fonts = [
+    '/usr/share/fonts/truetype/roboto/RobotoBold.ttf',
     '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-Bold.ttf',   # R.Pi
     '/usr/share/fonts/truetype/freefont/FreeMono.ttf',                # R.Pi
     '/usr/share/fonts/truetype/LiberationMono-Bold.ttf',              # B.B
@@ -69,30 +71,29 @@ def display(epd):
   byHour = forecast.hourly()
 
   canvas = Image.new("1", epd.size, WHITE)
-
+  draw = ImageDraw.Draw(canvas)
   weather_image = currently.icon
 
   image = getWeatherImage(weather_image)
-  icon_x = (epd.width - 60) / 2;
+  icon_x = 0;
   icon_y = (epd.height / 2)
-  canvas.paste(image, (icon_x - (178/2), icon_y - (178/2)))
+  canvas.paste(image, (icon_x, icon_y - (178/2)))
 
   font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
 
   index = 0
   icon_index = 0
   for hourlyData in byHour.data:
-    if icon_index > 2: break
-    if(hourlyData.icon != weather_image):
-      weather_image = hourlyData.icon
-      icon = getWeatherImage(weather_image)
-      icon_rs = icon.resize((60, 60))
-      icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
-      canvas.paste(icon_rs,((epd.width - 60),(icon_index*60)))
-      index = index + 1
-      icon_index = icon_index + 1
-      draw.text((178, (icon_index * 60)-30), index, fill=WHITE, font=font)
-
+    if icon_index < 3:
+      if(hourlyData.icon != weather_image):
+        weather_image = hourlyData.icon
+        icon = getWeatherImage(weather_image)
+        icon_rs = icon.resize((60, 60))
+        icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
+        canvas.paste(icon_rs,((epd.width - 60),(icon_index*60)))
+        icon_index = icon_index + 1
+        draw.text((178, (icon_index * 60)-40), "+%d" % index, fill=BLACK, font=font)
+    index = index + 1
 
   epd.display(canvas)
   epd.update()
