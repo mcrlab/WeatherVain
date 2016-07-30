@@ -22,25 +22,6 @@ if '' == api_key:
     raise 'no api key'
 
 
-possible_fonts = [
-    '/usr/share/fonts/truetype/roboto/RobotoBold.ttf',
-    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono-Bold.ttf',   # R.Pi
-    '/usr/share/fonts/truetype/freefont/FreeMono.ttf',                # R.Pi
-    '/usr/share/fonts/truetype/LiberationMono-Bold.ttf',              # B.B
-    '/usr/share/fonts/truetype/DejaVuSansMono-Bold.ttf',              # B.B
-    '/usr/share/fonts/TTF/FreeMonoBold.ttf',                          # Arch
-    '/usr/share/fonts/TTF/DejaVuSans-Bold.ttf'                        # Arch
-]
-
-FONT_FILE = ''
-for f in possible_fonts:
-    if os.path.exists(f):
-        FONT_FILE = f
-        break
-
-if '' == FONT_FILE:
-    raise 'no font file found'
-
 FONT_SIZE = 20
 
 def main(argv):
@@ -79,7 +60,7 @@ def display(epd):
   icon_y = (epd.height / 2)
   canvas.paste(image, (icon_x, icon_y - (178/2)))
 
-  font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
+  font = ImageFont.truetype("%s/Dosis-ExtraBold.ttf" % os.path.dirname(os.path.realpath(__file__)), FONT_SIZE)
 
   index = 0
   icon_index = 0
@@ -87,6 +68,7 @@ def display(epd):
     if icon_index < 3:
       if(hourlyData.icon != weather_image):
         weather_image = hourlyData.icon
+        print hourlyData.time.strftime("%Y-%m-%d %H:%M")
         icon = getWeatherImage(weather_image)
         icon_rs = icon.resize((60, 60))
         icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
