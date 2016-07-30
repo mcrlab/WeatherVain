@@ -22,7 +22,7 @@ if '' == api_key:
     raise 'no api key'
 
 
-FONT_SIZE = 20
+FONT_SIZE = 15
 
 def main(argv):
   epd = EPD()
@@ -67,6 +67,7 @@ def display(epd):
   for hourlyData in byHour.data:
     if icon_index < 3:
       if(hourlyData.icon != weather_image):
+        print hourlyData.time.strftime("%H:%M")
         weather_image = hourlyData.icon
         print hourlyData.time.strftime("%Y-%m-%d %H:%M")
         icon = getWeatherImage(weather_image)
@@ -74,7 +75,7 @@ def display(epd):
         icon_rs = icon_rs.convert("1", dither=Image.FLOYDSTEINBERG)
         canvas.paste(icon_rs,((epd.width - 60),(icon_index*60)))
         icon_index = icon_index + 1
-        draw.text((178, (icon_index * 60)-40), "+%d" % index, fill=BLACK, font=font)
+        draw.text((178, (icon_index * 60)-30), "%s" % hourlyData.time.strftime("%H%p"), fill=BLACK, font=font)
     index = index + 1
 
   epd.display(canvas)
