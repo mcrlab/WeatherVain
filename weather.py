@@ -52,18 +52,18 @@ def getForecast():
   
 
 def buildCanvas(forecast):
-  currently = forecast.currently()
+  daily = forecast.daily()
   font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
 
   canvas = Image.new("1", (264,176), WHITE)
   draw = ImageDraw.Draw(canvas)
-  weather_image = currently.icon
+  weather_image = daily.icon
   image = getWeatherIcon(weather_image)
   icon_x = (264/2) - (178 / 2);
   icon_y = 0
   canvas.paste(image, (icon_x, icon_y))
   draw.text((0, 0), "CHEESE", fill=BLACK, font=font)
-
+  draw.rectangle((0,0),(40,40), fill=BLACK, outline=BLACK)
   return canvas
 
 def render(canvas):
