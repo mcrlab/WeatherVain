@@ -25,12 +25,12 @@ api_key = api_text_file.read().strip(' \t\n\r')
 if '' == api_key:
     raise 'no api key'
 
-
+FONT_FILE = '%s/Dosis-ExtraBold.ttf' % os.path.dirname(os.path.realpath(__file__))
 FONT_SIZE = 15
 
 def main(argv):
   forecast = getForecast()
-  canvas = getCanvas(forecast)
+  canvas = buildCanvas(forecast)
   render(canvas)
 
 def getWeatherIcon(text):
@@ -51,8 +51,9 @@ def getForecast():
   return forecastio.load_forecast(api_key, lat, lon)
   
 
-def getCanvas(forecast):
+def buildCanvas(forecast):
   currently = forecast.currently()
+  font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
 
   canvas = Image.new("1", (264,176), WHITE)
   draw = ImageDraw.Draw(canvas)
@@ -61,6 +62,7 @@ def getCanvas(forecast):
   icon_x = (264/2) - (image.width / 2);
   icon_y = 0
   canvas.paste(image, (icon_x, icon_y))
+  draw.text((0, 0), "CHEESE", fill=BLACK, font=font)
 
   return canvas
 
