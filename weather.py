@@ -59,7 +59,7 @@ def buildCanvas(forecast):
   draw = ImageDraw.Draw(canvas)
   weather_image = currently.icon
   image = getWeatherIcon(weather_image)
-  icon_x = (264/2) - (image.width / 2);
+  icon_x = (264/2) - (178 / 2);
   icon_y = 0
   canvas.paste(image, (icon_x, icon_y))
   draw.text((0, 0), "CHEESE", fill=BLACK, font=font)
