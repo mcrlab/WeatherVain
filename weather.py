@@ -15,6 +15,7 @@ import time
 
 WHITE = 1
 BLACK = 0
+GREY = 0.5
 
 WIDTH = 264
 HEIGHT = 176
@@ -52,7 +53,9 @@ def getForecast():
   
 
 def buildCanvas(forecast):
-  daily = forecast.daily()
+  daily = forecast.currently()
+  byHour = forecast.hourly()
+
   font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
 
   canvas = Image.new("1", (264,176), WHITE)
@@ -62,8 +65,17 @@ def buildCanvas(forecast):
   icon_x = (264/2) - (178 / 2);
   icon_y = 0
   canvas.paste(image, (icon_x, icon_y))
-  draw.text((0, 0), "CHEESE", fill=BLACK, font=font)
-  draw.rectangle((0,0),(40,40), fill=BLACK, outline=BLACK)
+  #draw.text((0, 0), "CHEESE", fill=BLACK, font=font)
+
+  a = 0
+  sec = 264 / 12
+
+  index = 0
+  for hourlyData in byHour.data:
+    if(index > 12) : break
+    rain = 10 * hourlyData.precipProbability
+    draw.rectangle([(index*sec,(178-rain)),((index*sec)+sec,178)], fill=BLACK, outline=BLACK)
+    index = index + 1
   return canvas
 
 def render(canvas):
