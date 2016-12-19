@@ -22,7 +22,7 @@ HEIGHT = 176
 def main(argv):
 
   try:
-    with open('configg.json') as json_data_file:
+    with open('config.json') as json_data_file:
       cfg = json.load(json_data_file)
       start(cfg)
   except IOError:
