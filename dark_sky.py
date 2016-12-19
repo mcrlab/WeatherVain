@@ -2,7 +2,6 @@ import requests
 import os
 import sys
 import re
-import json
 
 from PIL import Image
 from PIL import ImageOps
@@ -11,6 +10,8 @@ from PIL import ImageFont
 
 from EPD import EPD
 
+from datetime import datetime
+import time
 
 WHITE = 1
 BLACK = 0
@@ -19,22 +20,19 @@ GREY = 0.5
 WIDTH = 264
 HEIGHT = 176
 
+api_text_file = open('%s/api.txt' % (os.path.dirname(os.path.realpath(__file__))))
+api_key = api_text_file.read().strip(' \t\n\r')
+
+if '' == api_key:
+    raise 'no api key'
+
 def main(argv):
 
   try:
-    with open('configg.json') as json_data_file:
-      cfg = json.load(json_data_file)
-      start(cfg)
-  except IOError:
-    canvas = buildCanvas("fail")
-    render(canvas)
-
-def  start(cfg):
-  try:
-    forecast = getForecast(cfg)
+    forecast = getForecast()
   except requests.ConnectionError as e:
-    print "Connection Error"
-    forecast = "fail"
+  	print "Connection Error"
+  	forecast = "fail"
 
 
   canvas = buildCanvas(forecast)
@@ -50,13 +48,14 @@ def getWeatherIcon(text):
   return image
 
 
-def getForecast(cfg):
+def getForecast():
 
   print "fetching forecast"
-  url = 'https://api.darksky.net/forecast/%s/53.4445041,-1.9551201' % cfg['api']
-
+  url = 'https://api.darksky.net/forecast/%s/53.4445041,-1.9551201' % api_key
   r = requests.get(url)
+  r.raise_for_status()
   data = r.json()
+  
   return data['currently']['icon']
 
 def buildCanvas(forecast):
