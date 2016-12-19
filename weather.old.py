@@ -1,4 +1,4 @@
-import requests
+import forecastio
 import os
 import sys
 import re
@@ -26,19 +26,13 @@ api_key = api_text_file.read().strip(' \t\n\r')
 if '' == api_key:
     raise 'no api key'
 
+FONT_FILE = '%s/Dosis-ExtraBold.ttf' % os.path.dirname(os.path.realpath(__file__))
+FONT_SIZE = 15
+
 def main(argv):
-
-  try:
-    forecast = getForecast()
-  except requests.ConnectionError as e:
-  	print "Connection Error"
-  	forecast = "fail"
-
-
+  forecast = getForecast()
   canvas = buildCanvas(forecast)
   render(canvas)
-
-
 
 def getWeatherIcon(text):
   file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), text)
@@ -50,23 +44,39 @@ def getWeatherIcon(text):
 
 def getForecast():
 
-  print "fetching forecast"
-  url = 'https://api.darksky.net/forecast/%s/53.4445041,-1.9551201' % api_key
+  lat = 53.4393315
+  lon = -1.9568661
 
-  r = requests.get(url)
-  data = r.json()
-  return data['currently']['icon']
+  print "fetching forecast"
+
+  return forecastio.load_forecast(api_key, lat, lon)
+  
 
 def buildCanvas(forecast):
+  daily = forecast.currently()
+  byHour = forecast.hourly()
+
+  font = ImageFont.truetype(FONT_FILE, FONT_SIZE)
+
   canvas = Image.new("1", (264,176), WHITE)
   draw = ImageDraw.Draw(canvas)
-  image = getWeatherIcon(forecast)
+  weather_image = daily.icon
+  image = getWeatherIcon(weather_image)
   icon_x = (264/2) - (178 / 2);
   icon_y = 0
   canvas.paste(image, (icon_x, icon_y))
- 
-  return canvas
+  #draw.text((0, 0), "CHEESE", fill=BLACK, font=font)
 
+  a = 0
+  sec = 264 / 12
+
+  index = 0
+  for hourlyData in byHour.data:
+    if(index > 12) : break
+    rain = 10 * hourlyData.precipProbability
+    draw.rectangle([(index*sec,(178-rain)),((index*sec)+sec,178)], fill=BLACK, outline=BLACK)
+    index = index + 1
+  return canvas
 
 def render(canvas):
   try:
@@ -74,7 +84,6 @@ def render(canvas):
     epd.display(canvas)
     epd.update()
   except IOError:
-    print "EPD not supported";
     canvas.show()
 
 
@@ -87,7 +96,4 @@ if __name__ == "__main__":
   except KeyboardInterrupt:
       sys.exit('interrupted')
       pass
-
-
-
 
