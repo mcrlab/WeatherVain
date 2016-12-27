@@ -56,6 +56,7 @@ def getForecast(cfg):
   url = 'https://api.darksky.net/forecast/%s/53.4445041,-1.9551201' % cfg['api']
 
   r = requests.get(url)
+  
   data = r.json()
   return data['currently']['icon']
 
