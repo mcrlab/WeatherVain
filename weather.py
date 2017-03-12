@@ -22,7 +22,7 @@ HEIGHT = 176
 def main(argv):
 
   try:
-    with open('config.json') as json_data_file:
+    with open('%s/config.json' % (os.path.dirname(os.path.realpath(__file__)))) as json_data_file:
       cfg = json.load(json_data_file)
       start(cfg)
   except IOError:
@@ -56,7 +56,6 @@ def getForecast(cfg):
   url = 'https://api.darksky.net/forecast/%s/53.4445041,-1.9551201' % cfg['api']
 
   r = requests.get(url)
-  
   data = r.json()
   return data['currently']['icon']
 
