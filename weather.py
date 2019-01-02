@@ -27,24 +27,22 @@ def main(argv):
       start(cfg)
   except IOError:
     canvas = buildCanvas("fail")
+    print("No config file found");
     render(canvas)
 
 def  start(cfg):
   try:
     forecast = getForecast(cfg)
   except requests.ConnectionError as e:
-    print "Connection Error"
+    print("Connection Error");
     forecast = "fail"
-
 
   canvas = buildCanvas(forecast)
   render(canvas)
 
-
-
 def getWeatherIcon(text):
   file_name = "%s/icons/%s.png" % (os.path.dirname(os.path.realpath(__file__)), text)
-  print file_name
+  print(file_name);
   image = Image.open(file_name)
   image = ImageOps.grayscale(image)
   return image
@@ -52,8 +50,8 @@ def getWeatherIcon(text):
 
 def getForecast(cfg):
 
-  print "fetching forecast"
-  url = 'https://api.darksky.net/forecast/%s/53.4445041,-1.9551201' % cfg['api']
+  print( "fetching forecast" );
+  url = 'https://api.darksky.net/forecast/%s/%s,%s' % (cfg['api'], cfg['lat'], cfg['lon'])
 
   r = requests.get(url)
   data = r.json()
@@ -63,10 +61,10 @@ def buildCanvas(forecast):
   canvas = Image.new("1", (264,176), WHITE)
   draw = ImageDraw.Draw(canvas)
   image = getWeatherIcon(forecast)
-  icon_x = (264/2) - (178 / 2);
+  icon_x = (264//2) - (178 // 2);
   icon_y = 0
   canvas.paste(image, (icon_x, icon_y))
- 
+
   return canvas
 
 
@@ -76,7 +74,7 @@ def render(canvas):
     epd.display(canvas)
     epd.update()
   except IOError:
-    print "EPD not supported";
+    print( "EPD not supported");
     canvas.show()
 
 
@@ -89,7 +87,3 @@ if __name__ == "__main__":
   except KeyboardInterrupt:
       sys.exit('interrupted')
       pass
-
-
-
-
