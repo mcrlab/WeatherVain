@@ -74,7 +74,7 @@ def draw_text(text):
 def buildCanvas(icon_name, message=""):
   canvas = Image.new("1", (WIDTH,HEIGHT), WHITE)
   draw = ImageDraw.Draw(canvas)
-  font = ImageFont.truetype("%s/Dosis-ExtraBold.ttf" % os.path.dirname(os.path.realpath(__file__)), FONT_SIZE);
+  font = ImageFont.truetype("%s/fonts/Dosis-ExtraBold.ttf" % os.path.dirname(os.path.realpath(__file__)), FONT_SIZE);
 
   image = getWeatherIcon(icon_name)
   icon_x = (WIDTH//2) - (HEIGHT // 2);
