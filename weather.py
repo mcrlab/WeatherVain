@@ -16,8 +16,9 @@ GREY = 0.5
 WIDTH = 264
 HEIGHT = 176
 
-FONT_SIZE = 16
+FONT_SIZE = 15
 API_URL = 'https://api.darksky.net/forecast/%s/%s,%s'
+CONFIG_FILE = './config.json'
 
 
 def validateConfig(cfg):
@@ -25,9 +26,9 @@ def validateConfig(cfg):
 
 
 def main(argv):
-    filename = './config.json'
+
     try:
-        with open(filename) as json_data_file:
+        with open(CONFIG_FILE) as json_data_file:
             cfg = json.load(json_data_file)
             validateConfig(cfg)
             start(cfg)
@@ -48,9 +49,9 @@ def start(cfg):
     except requests.ConnectionError:
         print("Connection Error")
         forecast = "fail"
-
-    canvas = build_canvas(icon, summary)
-    render(canvas)
+    finally:
+        canvas = build_canvas(icon, summary)
+        render(canvas)
 
 
 def get_weather_icon(icon_name):
