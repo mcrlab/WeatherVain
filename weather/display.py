@@ -36,20 +36,20 @@ def draw_text(canvas, message):
         width_of_line = 0
         number_of_lines = 0
 
-        for token in message.split():
-            token = token + " "
-            token_width = font.getsize(token)[0]
+        for word in message.split():
+            word = word + " "
+            word_width = font.getsize(word)[0]
 
-            if width_of_line+token_width < WIDTH - SPACING:
-                line += token
-                width_of_line += token_width
+            if width_of_line+word_width < WIDTH - SPACING:
+                line += word
+                width_of_line += word_width
             else:
                 lines.append(line)
                 number_of_lines += 1
                 width_of_line = 0
                 line = ""
-                line += token
-                width_of_line += token_width
+                line += word
+                width_of_line += word_width
         if line:
             lines.append(line)
             number_of_lines += 1
