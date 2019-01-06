@@ -8,6 +8,7 @@ CONFIG_FILE = './config.json'
 
 logger = logging.getLogger('weather_application')
 
+
 def validateConfig(cfg):
     pass
 
@@ -18,26 +19,17 @@ def main():
         with open(CONFIG_FILE) as json_data_file:
             cfg = json.load(json_data_file)
             validateConfig(cfg)
-            start(cfg)
+            icon, summary = get_forecast(cfg)
+            render(icon, summary)
     except IOError as error:
         logger.info("No config file found")
         render("fail", "No config file")
-    except ValueError as error:
-        print(error)
-
-
-def start(cfg):
-    try:
-        icon, summary = get_forecast(cfg)
     except requests.ConnectionError:
         logger.info("Connection Error")
-        icon = "fail"
-        summary = "Connection Error"
-    except KeyError:
-        icon = "fail"
-        summary = "No forecast"
-    finally:
-        render(icon, summary)
+        render("fail", "Connection Error")
+    except ValueError:
+        logger.info("Connection Error")
+        render("fail", "Value Error")
 
 
 def get_forecast(cfg):

@@ -8,9 +8,10 @@ class TestApp(unittest.TestCase):
 
     def setUp(self):
         URL = 'https://api.darksky.net/forecast/API/LAT,LON'
+        response_json = '{"currently": {"icon":"rain"}, "hourly": {"summary":"summary"}}'
         httpretty.register_uri(httpretty.GET, URL,
                                content_type='application/json',
-                               body='{"currently": {"icon":"rain"}, "hourly": {"summary":"summary"}}')
+                               body=response_json)
 
     def test_mocked_get_request(self):
         config = {"api": "API", 'lat': 'LAT', "lon": "LON"}

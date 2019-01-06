@@ -81,14 +81,14 @@ def render(icon_name, message=""):
         draw_icon(canvas, icon_name)
         draw_text(canvas, message)
 
-        to_display(canvas)
+        send_to_display(canvas)
 
     except IOError:
         print("EPD not supported")
         canvas.show()
 
 
-def to_display(canvas):
+def send_to_display(canvas):
     try:
         epd = EPD()
         epd.display(canvas)
