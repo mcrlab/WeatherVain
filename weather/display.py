@@ -3,6 +3,8 @@ from PIL import ImageOps
 from PIL import ImageDraw
 from PIL import ImageFont
 
+import datetime
+
 from EPD import EPD
 
 WHITE = 1
@@ -16,6 +18,12 @@ SPACING = 10
 FONT_SIZE = 15
 FONT_PATH = "./fonts/Dosis-ExtraBold.ttf"
 
+def draw_arc(canvas):
+    now = datetime.datetime.now()
+    arc = ((now.minute - (now.minute % 15)) // 15) * 90
+    draw = ImageDraw.Draw(canvas)
+    draw.pieslice([(5, 5), (25, 25)], arc - 90, arc, WHITE, BLACK)
+
 
 def draw_text(canvas, message):
     font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
@@ -23,47 +31,39 @@ def draw_text(canvas, message):
 
     text_width, text_height = draw.textsize(message, font=font)
 
-    if(text_width < WIDTH - SPACING):
-        text_position_x = (WIDTH // 2) - (text_width // 2)
-        text_position_y = HEIGHT - 30
-        draw.text((text_position_x, text_position_y),
-                  message,
-                  font=font,
-                  fill=BLACK)
-    else:
-        line = ""
-        lines = []
-        width_of_line = 0
-        number_of_lines = 0
+    line = ""
+    lines = []
+    width_of_line = 0
+    number_of_lines = 0
 
-        for word in message.split():
-            word = word + " "
-            word_width = font.getsize(word)[0]
+    for word in message.split():
+        word = word + " "
+        word_width = font.getsize(word)[0]
 
-            if width_of_line+word_width < WIDTH - SPACING:
-                line += word
-                width_of_line += word_width
-            else:
-                lines.append(line)
-                number_of_lines += 1
-                width_of_line = 0
-                line = ""
-                line += word
-                width_of_line += word_width
-        if line:
+        if width_of_line+word_width < WIDTH - SPACING:
+            line += word
+            width_of_line += word_width
+        else:
             lines.append(line)
             number_of_lines += 1
+            width_of_line = 0
+            line = ""
+            line += word
+            width_of_line += word_width
+    if line:
+        lines.append(line)
+        number_of_lines += 1
 
-        y_text = HEIGHT - FONT_SIZE - (len(lines) * FONT_SIZE)
+    y_text = HEIGHT - FONT_SIZE - (len(lines) * FONT_SIZE)
 
-        for line in lines:
-            width, height = font.getsize(line)
-            x_text = (WIDTH - width) // 2
-            draw.text((x_text, y_text),
-                      line,
-                      font=font,
-                      fill=BLACK)
-            y_text += height
+    for line in lines:
+        width, height = font.getsize(line)
+        x_text = (WIDTH - width) // 2
+        draw.text((x_text, y_text),
+                  line,
+                  font=font,
+                  fill=BLACK)
+        y_text += height
 
 
 def draw_icon(canvas, icon_name):
@@ -80,6 +80,7 @@ def render(icon_name, message=""):
 
         draw_icon(canvas, icon_name)
         draw_text(canvas, message)
+        draw_arc(canvas)
 
         send_to_display(canvas)
 
