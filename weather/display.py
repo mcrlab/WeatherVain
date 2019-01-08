@@ -89,6 +89,10 @@ def render(icon_name, message=""):
         canvas.show()
 
 
+def clear():
+    pass
+
+
 def send_to_display(canvas):
     try:
         epd = EPD()
