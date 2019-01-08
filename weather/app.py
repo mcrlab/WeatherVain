@@ -4,7 +4,7 @@ from weather.display import render
 import logging
 import datetime
 import time
-from weather.scheduler import Scheduler
+
 
 API_URL = 'https://api.darksky.net/forecast/%s/%s,%s'
 CONFIG_FILE = './config.json'
@@ -33,7 +33,7 @@ def start_forecast_service(cfg):
             icon, summary = get_forecast(cfg)
             render(icon, summary)
             time.sleep(cfg['interval'])
-            
+
     except KeyboardInterrupt:
         print('interrupted!')
     except requests.ConnectionError:
